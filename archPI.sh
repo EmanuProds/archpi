@@ -198,9 +198,9 @@ update_configs() {
     curl -fsSL https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
     tar xvf cachyos-repo.tar.xz
     cd cachyos-repo
-    sudo ./cachyos-repo.sh --remove
+    sudo ./cachyos-repo.sh
     cd ..
-    rm cachyos-repo
+    rm -rf cachyos-repo
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
