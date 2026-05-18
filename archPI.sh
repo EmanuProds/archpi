@@ -197,6 +197,7 @@ update_configs() {
     {
     curl -fsSL https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
     tar xvf cachyos-repo.tar.xz
+    rm cachyos-repo.tar.xz
     cd cachyos-repo
     sudo ./cachyos-repo.sh
     cd ..
