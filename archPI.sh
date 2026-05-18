@@ -193,7 +193,7 @@ update_configs() {
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
-    dialog --title "Wait" --infobox "\nSetting up Cachyos repositories..."
+    dialog --title "Wait" --infobox "\nSetting up Cachyos repositories..." 7 50
     {
     curl -fsSL https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
     tar xvf cachyos-repo.tar.xz
@@ -205,7 +205,7 @@ update_configs() {
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
-    dialog --title "Wait" --infobox "\nSetting up Cachyos kernel..."
+    dialog --title "Wait" --infobox "\nSetting up Cachyos kernel..." 7 50
     {
     sudo pacman -Sc --noconfirm $KERNEL
     } >> $HOME/archPI_logs.txt 2>&1
