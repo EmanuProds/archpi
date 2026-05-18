@@ -1,4 +1,4 @@
-# 🐧 archPI - Arch Linux Post-Installation Script
+# 🐧 Arch Linux Post-Installation Script
 
 [![Arch Linux](https://img.shields.io/badge/Arch_Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)](https://archlinux.org/)
 [![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash/)
