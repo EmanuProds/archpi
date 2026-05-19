@@ -199,7 +199,7 @@ update_configs() {
     tar xvf cachyos-repo.tar.xz
     rm cachyos-repo.tar.xz
     cd cachyos-repo
-    sudo ./cachyos-repo.sh
+    yes | sudo ./cachyos-repo.sh
     cd ..
     rm -rf cachyos-repo
     } >> $HOME/archPI_logs.txt 2>&1
@@ -207,7 +207,7 @@ update_configs() {
 
     dialog --title "Wait" --infobox "\nSetting up Cachyos kernel..." 7 50
     {
-    sudo pacman -Sc --noconfirm $KERNEL
+    sudo pacman -S --noconfirm $KERNEL
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
