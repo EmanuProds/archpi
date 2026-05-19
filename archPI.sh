@@ -249,7 +249,7 @@ dependencies() {
     sudo pacman -S --noconfirm $BASE
     git clone $PARU_REPO
     cd paru
-    makepkg -si
+    yes 1 | makepkg -si
     cd ..
     rm -rf paru
     } >> $HOME/archPI_logs.txt 2>&1
