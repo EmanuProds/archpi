@@ -145,10 +145,29 @@ FLATPAK_THEME="org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark"
 GRADIA_EXTENSION="gnome-shell-extension-gradia-capture-git"
 
 ## dependencies to inicialize ##
+# zenity installation
+if pacman -Qi zenity &> /dev/null; then
+    echo -e "${GREEN}The zenity package is already installed. Skipping...${RESET}"
+    sleep 1.5
+else
+    echo -e "${YELLOW}Installing zenity...${RESET}"
+    sudoz pacman -S --noconfirm zenity &> /dev/null
+    sleep 1.5
+fi
+
 # sudo in memory with zenity
 echo -e "${YELLOW}Requesting root access for operations...${RESET}"
-sudo -v
-while true; do sudo -n true; sleep 10; kill -0 "$$" || exit; done 2>/dev/null &
+SUDOPASSWORD=$(zenity --password --title="Authentication" --text="Enter your administrator password:")
+
+if [ -z "$SUDOPASSWORD" ]; then
+    exit 1
+fi
+
+trap 'SUDOPASSWORD=""; unset SUDOPASSWORD' EXIT INT TERM
+
+sudoz() {
+    echo "$SUDOPASSWORD" | sudo -S "$@"
+}
 
 # shh key autenticate
 echo -n "Do you want to configure theSSH key? (yes/no): "
@@ -170,30 +189,6 @@ case "$ANSWER" in
         echo -e "${YELLOW}Skipping SSH configuration...${RESET}"
         ;;
 esac
-
-# zenity installation
-if pacman -Qi zenity &> /dev/null; then
-    echo -e "${GREEN}The zenity package is already installed. Skipping...${RESET}"
-    sleep 1.5
-else
-    echo -e "${YELLOW}Installing zenity...${RESET}"
-    sudo pacman -S --noconfirm zenity &> /dev/null
-    sleep 1.5
-fi
-
-passwordz() {
-SUDOPASSWORD=$(zenity --password --title="Authentication" --text="Enter your administrator password:")
-
-if [ -z "$SUDOPASSWORD" ]; then
-    exit 1
-fi
-
-trap 'SUDOPASSWORD=""; unset SUDOPASSWORD' EXIT INT TERM
-}
-
-sudoz() {
-    echo "$SUDOPASSWORD" | sudo -S "$@"
-}
 
 # dialog installation
 if pacman -Qi dialog &> /dev/null; then
