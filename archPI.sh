@@ -293,8 +293,6 @@ dependencies() {
 
 # install graphics drivers and enable video acceleration
 video_multimedia() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nInstalling AMD video drivers..." 7 50
     {
     sudoz pacman -S --noconfirm $GRAPHICS_CARD_DRIVERS
@@ -319,8 +317,6 @@ video_multimedia() {
 
 # apps and utilities
 apps_and_utilities() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nInstalling essential applications..." 7 50
     {
     sudoz pacman -S --noconfirm $APPS
@@ -335,8 +331,6 @@ apps_and_utilities() {
 
 # development dependencies
 development() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nInstalling plugins..." 7 50
     {
     cp $API_SRC_DIR/.shell_aliases $HOME
@@ -400,8 +394,6 @@ development() {
 
 # installation virtualization and dependencies
 winboat (){
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nInstalling Winboat and Gnome-Boxes..." 7 50
     {
     sudoz pacman -S --noconfirm $VIRT_APPS
@@ -414,8 +406,6 @@ winboat (){
 
 # gaming dependencies
 gaming() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nInstalling Steam and Heroic Games Launcher..." 7 50
     {
     sudoz pacman -S --noconfirm $GAMING
@@ -434,8 +424,6 @@ gaming() {
 
 # wine dependencies
 wine() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nInstalling Wine and dependencies..." 7 50
     {
     sudoz pacman -S --noconfirm $WINE
@@ -448,8 +436,6 @@ wine() {
 
 # personalize system and themes
 personalize() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nCustomizing the system and themes..." 7 50
     {
     sudoz echo "pt_BR.UTF-8 UTF-8" >> $LOCALE
@@ -487,8 +473,6 @@ personalize() {
 
 # system cleanup
 cleanup() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nClearing system cache and orphaned packages..." 7 50
     {
     sudoz pacman -Sc --noconfirm
