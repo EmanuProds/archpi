@@ -88,12 +88,9 @@ EOF
 export DIALOGRC=/tmp/theme
 
 ## packages variables ##
-# repositorys
-BASE="base-devel git nano wget curl cava fastfetch"
-PARU_REPO="https://aur.archlinux.org/paru.git"
-
 # system
 BLOTWARE="gnome-connections gnome-contacts gnome-maps gnome-music gnome-software epiphany htop vim"
+BASE="base-devel git nano wget curl cava fastfetch paru"
 KERNEL="linux-cachyos linux-cachyos-headers"
 SYSTEM_PACKAGES="pacman-contrib archlinux-appstream-data fish gdm-settings bazaar power-profiles-daemon resources topgrade gnome-epub-thumbnailer samba nautilus-share tesseract tesseract-data-por \
 openssl gnome-tweaks fuse ddcutil grub-btrfs-support grub-hook gst-thumbnailers gufw"
@@ -145,6 +142,7 @@ ICONS="adwaita-colors-icon-theme morewaita-icon-theme morewaita-icon-theme"
 THEME="adw-gtk-theme"
 PLYMOUTH="plymouth"
 FLATPAK_THEME="org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark"
+GRADIA_EXTENSION="gnome-shell-extension-gradia-capture-git"
 
 ## dependencies to inicialize ##
 # sudo in memory with zenity
@@ -267,18 +265,13 @@ dependencies() {
     dialog --title "Wait" --infobox "\nAdding support for AUR..." 7 50
     {
     sudoz pacman -S --noconfirm $BASE
-    git clone $PARU_REPO
-    cd paru
-    yes 1 | sudoz makepkg -si
-    cd ..
-    rm -rf paru
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nInstalling and configuring system dependencies..." 7 50
     {
     sudoz pacman -S -noconfirm $SYSTEM_PACKAGES $ARCHIVE $FONTS $PRINTERS
-    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags "-S" $SYSTEM_PACKAGES_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $SYSTEM_PACKAGES_AUR
     sudoz systemctl enable --now cups
     sudoz usermod -aG lp $USER
 	sudoz usermod -aG saned,scanner $USER
@@ -331,7 +324,7 @@ apps_and_utilities() {
     dialog --title "Wait" --infobox "\nInstalling essential applications..." 7 50
     {
     sudoz pacman -S --noconfirm $APPS
-    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $APPS_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $APPS_AUR
     sudoz pacman -S --noconfirm $OFFICE
     flatpak install flathub -y $FLATPAK_APPS
     } >> $HOME/archPI_logs.txt 2>&1
@@ -357,7 +350,7 @@ development() {
 
     dialog --title "Wait" --infobox "\nInstalling code editors..." 7 50
     {
-    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $IDE
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $IDE
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -373,7 +366,7 @@ development() {
     dialog --title "Wait" --infobox "\nInstalling development tools..." 7 50
     {
     sudoz pacman -S --noconfirm $DEV_PACKAGES
-    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $DEV_PACKAGES_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $DEV_PACKAGES_AUR
     flatpak install flathub -y $FLATPAK_DEV_APPS
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -397,7 +390,7 @@ development() {
     dialog --title "Wait" --infobox "\nInstalling JetBrains Mono Nerd Font and Microsoft Fonts..." 7 50
     {
     sudoz pacman -S --noconfirm $JETBRAINS_FONTS
-    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $MICROSOFT_FONTS
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $MICROSOFT_FONTS
     gsettings set org.gnome.desktop.interface monospace-font-name "JetBrainsMono Nerd Font 11"
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -431,7 +424,7 @@ gaming() {
 
     dialog --title "Wait" --infobox "\nInstalling gaming dependencies..." 7 50
     {
-    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $GAMING_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $GAMING_AUR
     flatpak install flathub -y $FLATPAK_GAMING
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -463,7 +456,7 @@ personalize() {
     sudoz locale-gen
     sudoz rmmod pcspkr
     sudoz echo "blacklist pcspkr" >> $NOBEEP
-    paru -S --noconfirm $ICONS $THEME
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $ICONS $THEME
     flatpak install flathub -y $FLATPAK_THEME
     gsettings set org.gnome.desktop.interface gtk-theme "Adw-gtk3-dark"
     gsettings set org.gnome.desktop.interface icon-theme "Adwaita-slate"
@@ -472,11 +465,7 @@ personalize() {
 
     dialog --title "Wait" --infobox "\nInstall gnome extensions..." 7 50
     {
-    git clone https://github.com/AlexanderVanhee/gradia-capture.git
-    cd gradia-capture
-    ./build.sh
-    cd ..
-    rm -rf gradia-capture
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $GRADIA_EXTENSION
     for ext in "${EXTENSIONS[@]}"; do
         (gnome-extensions-cli install "$ext" && gnome-extensions-cli enable "$ext")
     done
