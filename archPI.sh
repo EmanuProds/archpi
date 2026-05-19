@@ -147,10 +147,19 @@ PLYMOUTH="plymouth"
 FLATPAK_THEME="org.gtk.Gtk3theme.adw-gtk3 org.gtk.Gtk3theme.adw-gtk3-dark"
 
 ## dependencies to inicialize ##
-# sudo in memory
+# sudo in memory with zenity
 echo -e "${YELLOW}Requesting root access for operations...${RESET}"
-sudo -v
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+SUDOPASSWORD=$(zenity --password --title="Authentication" --text="Enter your administrator password:")
+
+if [ -z "$SUDOPASSWORD" ]; then
+    exit 1
+fi
+
+trap 'SUDOPASSWORD=""; unset SUDOPASSWORD' EXIT INT TERM
+
+sudoz() {
+    sudoz "$@"
+}
 
 # shh key autenticate
 echo -n "Do you want to configure theSSH key? (yes/no): "
@@ -179,17 +188,15 @@ if pacman -Qi dialog &> /dev/null; then
     sleep 1.5
 else
     echo -e "${YELLOW}Installing Dialog...${RESET}"
-    sudo pacman -S --noconfirm dialog &> /dev/null
+    sudoz pacman -S --noconfirm dialog &> /dev/null
     sleep 1.5
 fi
 
 # update system and remove blotwares
 update_configs() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nRemove bloatwares..." 7 50
     {
-    sudo pacman -Sy --noconfirm; sudo pacman -Rsc --noconfirm $BLOTWARE
+    sudoz pacman -Sy --noconfirm; sudoz pacman -Rsc --noconfirm $BLOTWARE
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -199,7 +206,7 @@ update_configs() {
     tar xvf cachyos-repo.tar.xz
     rm cachyos-repo.tar.xz
     cd cachyos-repo
-    yes | sudo ./cachyos-repo.sh
+    yes | sudoz ./cachyos-repo.sh
     cd ..
     rm -rf cachyos-repo
     } >> $HOME/archPI_logs.txt 2>&1
@@ -207,13 +214,13 @@ update_configs() {
 
     dialog --title "Wait" --infobox "\nSetting up Cachyos kernel..." 7 50
     {
-    sudo pacman -S --noconfirm $KERNEL
+    sudoz pacman -S --noconfirm $KERNEL
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nUptdate system...\nThis may take a few minutes." 7 50
     {
-    sudo pacman -Syu --noconfirm
+    sudoz pacman -Syu --noconfirm
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -222,21 +229,19 @@ update_configs() {
 
 # install system dependencies
 dependencies() {
-    export SUDO_ASKPASS=/usr/bin/zenity
-
     dialog --title "Wait" --infobox "\nAdding asterisks to passwords inputs..." 7 50
     {
     if grep -q "pwfeedback" "$SUDOERS_FILE"; then
         dialog --title "Interrompido" --infobox "\nThe asterisks are already activated" 7 50
         sleep 1
     else
-        sudo sed -i "/Defaults/a Defaults pwfeedback" "$SUDOERS_FILE"
+        sudoz sed -i "/Defaults/a Defaults pwfeedback" "$SUDOERS_FILE"
 
-        if sudo visudo -c; then
+        if sudoz visudo -c; then
             dialog --title "Process completed" --infobox "\nConfiguration applied successfully!" 7 50
             sleep 5
         else
-            sudo sed -i "/Defaults pwfeedback/d" "$SUDOERS_FILE"
+            sudoz sed -i "/Defaults pwfeedback/d" "$SUDOERS_FILE"
             dialog --title "Aborted" --msgbox "\nError validating sudoers file. Reverting changes..." 7 50
             sleep 1
         fi
@@ -246,10 +251,10 @@ dependencies() {
 
     dialog --title "Wait" --infobox "\nAdding support for AUR..." 7 50
     {
-    sudo pacman -S --noconfirm $BASE
+    sudoz pacman -S --noconfirm $BASE
     git clone $PARU_REPO
     cd paru
-    yes 1 | makepkg -si
+    yes 1 | sudoz makepkg -si
     cd ..
     rm -rf paru
     } >> $HOME/archPI_logs.txt 2>&1
@@ -257,14 +262,14 @@ dependencies() {
 
     dialog --title "Wait" --infobox "\nInstalling and configuring system dependencies..." 7 50
     {
-    sudo pacman -S -noconfirm $SYSTEM_PACKAGES $ARCHIVE $FONTS $PRINTERS
-    paru -S -noconfirm $SYSTEM_PACKAGES_AUR
-    sudo systemctl enable --now cups
-    sudo usermod -aG lp $USER
-	sudo usermod -aG saned,scanner $USER
-    sudo systemctl enable --now snapper-timeline.timer
-    sudo systemctl enable --now snapper-cleanup.timer
-    sudo timedatectl set-local-rtc 0 --adjust-system-clock
+    sudoz pacman -S -noconfirm $SYSTEM_PACKAGES $ARCHIVE $FONTS $PRINTERS
+    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags "-S" $SYSTEM_PACKAGES_AUR
+    sudoz systemctl enable --now cups
+    sudoz usermod -aG lp $USER
+	sudoz usermod -aG saned,scanner $USER
+    sudoz systemctl enable --now snapper-timeline.timer
+    sudoz systemctl enable --now snapper-cleanup.timer
+    sudoz timedatectl set-local-rtc 0 --adjust-system-clock
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -284,19 +289,19 @@ video_multimedia() {
 
     dialog --title "Wait" --infobox "\nInstalling AMD video drivers..." 7 50
     {
-    sudo pacman -S --noconfirm $GRAPHICS_CARD_DRIVERS
+    sudoz pacman -S --noconfirm $GRAPHICS_CARD_DRIVERS
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nAdding video acceleration..." 7 50
     {
-    sudo pacman -S --noconfirm $HA
+    sudoz pacman -S --noconfirm $HA
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nAdding proprietary codecs..." 7 50
     {
-    sudo pacman -S --noconfirm $FFMPEG
+    sudoz pacman -S --noconfirm $FFMPEG
     flatpak install flathub -y $FLATPAK_FFMPEG
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -310,9 +315,9 @@ apps_and_utilities() {
 
     dialog --title "Wait" --infobox "\nInstalling essential applications..." 7 50
     {
-    sudo pacman -S --noconfirm $APPS
-    sudo paru -S --noconfirm $APPS_AUR
-    sudo pacman -S --noconfirm $OFFICE
+    sudoz pacman -S --noconfirm $APPS
+    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $APPS_AUR
+    sudoz pacman -S --noconfirm $OFFICE
     flatpak install flathub -y $FLATPAK_APPS
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -337,23 +342,23 @@ development() {
 
     dialog --title "Wait" --infobox "\nInstalling code editors..." 7 50
     {
-    paru -S --noconfirm $IDE
+    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $IDE
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nInstalling containers and their dependencies..." 7 50
     {
-    sudo pacman -S --noconfirm $CONTAINERS
-    sudo usermod -aG docker $USER
-    sudo systemctl enable docker
-    sudo systemctl start docker
+    sudoz pacman -S --noconfirm $CONTAINERS
+    sudoz usermod -aG docker $USER
+    sudoz systemctl enable docker
+    sudoz systemctl start docker
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nInstalling development tools..." 7 50
     {
-    sudo pacman -S --noconfirm $DEV_PACKAGES
-    paru -S --noconfirm $DEV_PACKAGES_AUR
+    sudoz pacman -S --noconfirm $DEV_PACKAGES
+    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $DEV_PACKAGES_AUR
     flatpak install flathub -y $FLATPAK_DEV_APPS
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -376,8 +381,8 @@ development() {
 
     dialog --title "Wait" --infobox "\nInstalling JetBrains Mono Nerd Font and Microsoft Fonts..." 7 50
     {
-    sudo pacman -S --noconfirm $JETBRAINS_FONTS
-    paru -S --noconfirm $MICROSOFT_FONTS
+    sudoz pacman -S --noconfirm $JETBRAINS_FONTS
+    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $MICROSOFT_FONTS
     gsettings set org.gnome.desktop.interface monospace-font-name "JetBrainsMono Nerd Font 11"
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -391,8 +396,8 @@ winboat (){
 
     dialog --title "Wait" --infobox "\nInstalling Winboat and Gnome-Boxes..." 7 50
     {
-    sudo pacman -S --noconfirm $VIRT_APPS
-    sudo gpasswd -a libvirt $USER
+    sudoz pacman -S --noconfirm $VIRT_APPS
+    sudoz gpasswd -a libvirt $USER
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -405,13 +410,13 @@ gaming() {
 
     dialog --title "Wait" --infobox "\nInstalling Steam and Heroic Games Launcher..." 7 50
     {
-    sudo pacman -S --noconfirm $GAMING
+    sudoz pacman -S --noconfirm $GAMING
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
     dialog --title "Wait" --infobox "\nInstalling gaming dependencies..." 7 50
     {
-    paru -S --noconfirm $GAMING_AUR
+    echo "$SUDOPASSWORD" | paru -S -noconfirm --sudoflags $GAMING_AUR
     flatpak install flathub -y $FLATPAK_GAMING
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -425,7 +430,7 @@ wine() {
 
     dialog --title "Wait" --infobox "\nInstalling Wine and dependencies..." 7 50
     {
-    sudo pacman -S --noconfirm $WINE
+    sudoz pacman -S --noconfirm $WINE
     flatpak install flathub -y $FLATPAK_WINE
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -439,10 +444,10 @@ personalize() {
 
     dialog --title "Wait" --infobox "\nCustomizing the system and themes..." 7 50
     {
-    sudo echo "pt_BR.UTF-8 UTF-8" >> $LOCALE
-    sudo locale-gen
-    sudo rmmod pcspkr
-    sudo echo "blacklist pcspkr" >> $NOBEEP
+    sudoz echo "pt_BR.UTF-8 UTF-8" >> $LOCALE
+    sudoz locale-gen
+    sudoz rmmod pcspkr
+    sudoz echo "blacklist pcspkr" >> $NOBEEP
     paru -S --noconfirm $ICONS $THEME
     flatpak install flathub -y $FLATPAK_THEME
     gsettings set org.gnome.desktop.interface gtk-theme "Adw-gtk3-dark"
@@ -465,11 +470,11 @@ personalize() {
 
     dialog --title "Wait" --infobox "\nSetting up Plymouth..." 7 50
     {
-    sudo rm $SPINNER_DIR/watermark.png
-    sudo sed -i "s/VerticalAlignment=.7/VerticalAlignment=.5/" $SPINNER_CONFIG
-    sudo sed -i "s/MODULES=()/MODULES=(amdgpu)" $MKINITCPIO_CONFIG
-    sudo sed -i "/^HOOKS=/s/\(udev \)/\1plymouth /" $MKINITCPIO_CONFIG
-    sudo plymouth-set-default-theme -R spinner
+    sudoz rm $SPINNER_DIR/watermark.png
+    sudoz sed -i "s/VerticalAlignment=.7/VerticalAlignment=.5/" $SPINNER_CONFIG
+    sudoz sed -i "s/MODULES=()/MODULES=(amdgpu)" $MKINITCPIO_CONFIG
+    sudoz sed -i "/^HOOKS=/s/\(udev \)/\1plymouth /" $MKINITCPIO_CONFIG
+    sudoz plymouth-set-default-theme -R spinner
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -482,9 +487,9 @@ cleanup() {
 
     dialog --title "Wait" --infobox "\nClearing system cache and orphaned packages..." 7 50
     {
-    sudo pacman -Sc --noconfirm
-	sudo pacman -Rns $(pacman -Qtdq) --noconfirm
-	sudo flatpak uninstall --unused
+    sudoz pacman -Sc --noconfirm
+	sudoz pacman -Rns $(pacman -Qtdq) --noconfirm
+	sudoz flatpak uninstall --unused
     }
     sleep 1
 }
