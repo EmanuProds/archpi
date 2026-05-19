@@ -158,7 +158,7 @@ fi
 trap 'SUDOPASSWORD=""; unset SUDOPASSWORD' EXIT INT TERM
 
 sudoz() {
-    sudoz "$@"
+    echo "$SUDOPASSWORD" | sudo -S "$@"
 }
 
 # shh key autenticate
