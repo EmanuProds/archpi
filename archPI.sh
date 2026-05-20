@@ -22,21 +22,18 @@ LOCAL_DIR="$HOME/.local/share"
 
 # fish directory
 FISH_DIR="$HOME/.config/fish"
-if [ -d "$FISH_DIR" ]; then
-else
+if [ ! -d "$FISH_DIR" ]; then
     mkdir -p "$FISH_DIR"
 fi
 
 FISH_CONFD="$HOME/.config/fish/conf.d"
-if [ -d "$FISH_CONFD" ]; then
-else
+if [ ! -d "$FISH_CONFD" ]; then
     mkdir -p "$FISH_CONFD"
 fi
 
 # extensions directory
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
-if [ -d "$EXTENSIONS_DIR" ]; then
-else
+if [ ! -d "$EXTENSIONS_DIR" ]; then
     mkdir -p "$EXTENSIONS_DIR"
 fi
 
