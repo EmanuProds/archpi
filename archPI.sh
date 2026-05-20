@@ -266,6 +266,7 @@ dependencies() {
     dialog --title "Wait" --infobox "\nInstalling and configuring system dependencies..." 7 50
     {
     sudoz pacman -S -noconfirm $SYSTEM_PACKAGES $ARCHIVE $FONTS $PRINTERS
+    sudoz pacman -Rdd --noconfirm grub
     echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $SYSTEM_PACKAGES_AUR
     sudoz systemctl enable --now cups
     sudoz usermod -aG lp $USER
