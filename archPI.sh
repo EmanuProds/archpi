@@ -130,7 +130,7 @@ VIRT_APPS="winboat gnome-boxes"
 
 # games
 GAMING="steam gamemode gamescope protonplus protontricks mangojuice heroic-games-launcher adwsteamgtk prismlauncher"
-GAMING_AUR="adwsteamgtk"
+GAMING_AUR="adwsteamgtk eden-bin"
 FLATPAK_GAMING="com.steamgriddb.SGDBoop net.retrodeck.retrodeck io.github.hedge_dev.hedgemodmanager"
 
 # wine
@@ -266,7 +266,9 @@ dependencies() {
     dialog --title "Wait" --infobox "\nInstalling and configuring system dependencies..." 7 50
     {
     sudoz pacman -S -noconfirm $SYSTEM_PACKAGES $ARCHIVE $FONTS $PRINTERS
+    sudoz pacman -Rdd --noconfirm grub
     echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $SYSTEM_PACKAGES_AUR
+    sudoz grub-install --efi-directory=/boot/efi
     sudoz systemctl enable --now cups
     sudoz usermod -aG lp $USER
 	sudoz usermod -aG saned,scanner $USER
