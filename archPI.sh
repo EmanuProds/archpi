@@ -336,6 +336,7 @@ development() {
     cp $API_SRC_DIR/aliases.fish $FISH_CONFD
     git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
     make -C ble.sh install PREFIX=~/.local
+    rm -rf ble.sh
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
