@@ -110,7 +110,7 @@ FLATPAK_FFMPEG="org.freedesktop.Platform.ffmpeg-full/x86_64/24.08 org.freedeskto
 org.freedesktop.Platform.ffmpeg-full/x86_64/22.08"
 
 # apps
-APPS="remmina gimp inkscape handbrake-gui zen-browser-bin"
+APPS="remmina gimp inkscape handbrake zen-browser-bin"
 APPS_AUR="anydesk-bin gpu-screen-recorder-gtk"
 OFFICE="libreoffice-fresh libreoffice-fresh-pt-br"
 FLATPAK_APPS="be.alexandervanhee.gradia io.github.diegoivan.pdf_metadata_editor com.obsproject.Studio io.github.flattool.Ignition org.pitivi.Pitivi \
