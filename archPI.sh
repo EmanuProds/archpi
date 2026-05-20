@@ -130,7 +130,7 @@ VIRT_APPS="winboat gnome-boxes"
 
 # games
 GAMING="steam gamemode gamescope protonplus protontricks mangojuice heroic-games-launcher adwsteamgtk prismlauncher"
-GAMING_AUR="adwsteamgtk"
+GAMING_AUR="adwsteamgtk eden-bin"
 FLATPAK_GAMING="com.steamgriddb.SGDBoop net.retrodeck.retrodeck io.github.hedge_dev.hedgemodmanager"
 
 # wine
