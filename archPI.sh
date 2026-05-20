@@ -268,6 +268,7 @@ dependencies() {
     sudoz pacman -S -noconfirm $SYSTEM_PACKAGES $ARCHIVE $FONTS $PRINTERS
     sudoz pacman -Rdd --noconfirm grub
     echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $SYSTEM_PACKAGES_AUR
+    sudoz grub-install --efi-directory=/boot/efi
     sudoz systemctl enable --now cups
     sudoz usermod -aG lp $USER
 	sudoz usermod -aG saned,scanner $USER
