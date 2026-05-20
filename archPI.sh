@@ -180,7 +180,7 @@ sudoz() {
 }
 
 # shh key autenticate
-echo -n "Do you want to configure theSSH key? (yes/no): "
+echo -n "${YELLOW}Do you want to configure the SSH key? (yes/no): ${RESET}"
 read -r ANSWER
 
 case "$ANSWER" in
