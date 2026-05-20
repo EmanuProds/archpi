@@ -35,6 +35,10 @@ fi
 
 # extensions directory
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
+if [ -d "$EXTENSIONS_DIR" ]; then
+else
+    mkdir -p "$EXTENSIONS_DIR"
+fi
 
 # plymouth spinner directory
 SPINNER_DIR="/usr/share/plymouth/themes/spinner"
