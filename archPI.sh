@@ -22,10 +22,23 @@ LOCAL_DIR="$HOME/.local/share"
 
 # fish directory
 FISH_DIR="$HOME/.config/fish"
+if [ -d "$FISH_DIR" ]; then
+else
+    mkdir -p "$FISH_DIR"
+fi
+
 FISH_CONFD="$HOME/.config/fish/conf.d"
+if [ -d "$FISH_CONFD" ]; then
+else
+    mkdir -p "$FISH_CONFD"
+fi
 
 # extensions directory
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
+if [ -d "$EXTENSIONS_DIR" ]; then
+else
+    mkdir -p "$EXTENSIONS_DIR"
+fi
 
 # plymouth spinner directory
 SPINNER_DIR="/usr/share/plymouth/themes/spinner"
@@ -129,7 +142,7 @@ MICROSOFT_FONTS=" ttf-ms-fonts cabextract fontconfig"
 VIRT_APPS="winboat gnome-boxes"
 
 # games
-GAMING="steam gamemode gamescope protonplus protontricks mangojuice heroic-games-launcher adwsteamgtk prismlauncher"
+GAMING="steam gamemode gamescope protonplus protontricks mangojuice heroic-games-launcher prismlauncher"
 GAMING_AUR="adwsteamgtk eden-bin"
 FLATPAK_GAMING="com.steamgriddb.SGDBoop net.retrodeck.retrodeck io.github.hedge_dev.hedgemodmanager"
 
@@ -336,6 +349,7 @@ development() {
     cp $API_SRC_DIR/aliases.fish $FISH_CONFD
     git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
     make -C ble.sh install PREFIX=~/.local
+    rm -rf ble.sh
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 

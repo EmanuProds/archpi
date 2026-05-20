@@ -20,8 +20,3 @@ PS1='[\u@\h \W]\$ '
 
 # Starship and ble.sh initialization
 eval "$(starship init bash)"
-#source -- ~/.local/share/blesh/ble.sh
-
-# Mise config
-#eval "$(/home/emanuel/.local/bin/mise activate bash)"
-source -- ~/.local/share/blesh/ble.sh
