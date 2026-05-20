@@ -118,7 +118,7 @@ io.gitlab.adhami3310.Impression io.anytype.anytype org.nickvision.tubeconverter 
 
 # development
 IDE="zed visual-studio-code-bin"
-CONTAINERS="podman podman-compose docker containerd.io docker-compose docker-compose"
+CONTAINERS="podman podman-compose docker docker-compose"
 DEV_PACKAGES="python-pip kubectl mise github-cli starship android-tools tailscale opencode"
 DEV_PACKAGES_AUR="bdf-unifont linuxtoys"
 FLATPAK_DEV_APPS="io.github.shonebinu.Brief me.iepure.devtoolbox rest.insomnia.Insomnia io.podman_desktop.PodmanDesktop io.dbeaver.DBeaverCommunity"
