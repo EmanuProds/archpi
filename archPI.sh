@@ -110,7 +110,7 @@ FLATPAK_FFMPEG="org.freedesktop.Platform.ffmpeg-full/x86_64/24.08 org.freedeskto
 org.freedesktop.Platform.ffmpeg-full/x86_64/22.08"
 
 # apps
-APPS="remmina gimp inkscape handbrake-gui zen-browser-bin"
+APPS="remmina gimp inkscape handbrake zen-browser-bin"
 APPS_AUR="anydesk-bin gpu-screen-recorder-gtk"
 OFFICE="libreoffice-fresh libreoffice-fresh-pt-br"
 FLATPAK_APPS="be.alexandervanhee.gradia io.github.diegoivan.pdf_metadata_editor com.obsproject.Studio io.github.flattool.Ignition org.pitivi.Pitivi \
@@ -317,7 +317,7 @@ apps_and_utilities() {
     dialog --title "Wait" --infobox "\nInstalling essential applications..." 7 50
     {
     sudoz pacman -S --noconfirm $APPS
-    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $APPS_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $APPS_AUR
     sudoz pacman -S --noconfirm $OFFICE
     flatpak install flathub -y $FLATPAK_APPS
     } >> $HOME/archPI_logs.txt 2>&1
@@ -341,7 +341,7 @@ development() {
 
     dialog --title "Wait" --infobox "\nInstalling code editors..." 7 50
     {
-    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $IDE
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $IDE
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
 
@@ -357,7 +357,7 @@ development() {
     dialog --title "Wait" --infobox "\nInstalling development tools..." 7 50
     {
     sudoz pacman -S --noconfirm $DEV_PACKAGES
-    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $DEV_PACKAGES_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $DEV_PACKAGES_AUR
     flatpak install flathub -y $FLATPAK_DEV_APPS
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -381,7 +381,7 @@ development() {
     dialog --title "Wait" --infobox "\nInstalling JetBrains Mono Nerd Font and Microsoft Fonts..." 7 50
     {
     sudoz pacman -S --noconfirm $JETBRAINS_FONTS
-    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $MICROSOFT_FONTS
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $MICROSOFT_FONTS
     gsettings set org.gnome.desktop.interface monospace-font-name "JetBrainsMono Nerd Font 11"
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
@@ -411,7 +411,7 @@ gaming() {
 
     dialog --title "Wait" --infobox "\nInstalling gaming dependencies..." 7 50
     {
-    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags $GAMING_AUR
+    echo "$SUDOPASSWORD" | paru -S --noconfirm --sudoflags "-S" $GAMING_AUR
     flatpak install flathub -y $FLATPAK_GAMING
     } >> $HOME/archPI_logs.txt 2>&1
     sleep 1
