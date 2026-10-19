@@ -12,7 +12,7 @@ PHASES=(
   "04:Packages (pacman + paru)"
   "05:Codecs e aceleração de vídeo"
   "06:Virtualização (winboat, gnome-boxes)"
-  "07:Serviços (cups, docker, snapper, etc.)"
+  "07:Serviços systemd (cups, docker, snapper, etc.)"
   "08:Flatpaks"
   "09:Dotfiles (clone)"
   "10:GNOME (dconf)"
