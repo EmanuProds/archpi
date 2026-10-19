@@ -1,0 +1,6 @@
+# npm.txt — globais via npm (todo node gerido pelo mise)
+@opencode/cli
+prettier
+vtsls
+yaml-language-server
+gh-actions-language-server

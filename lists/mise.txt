@@ -1,0 +1,6 @@
+node@lts
+bun
+go
+usage
+pipx
+gh

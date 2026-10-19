@@ -1,0 +1,12 @@
+# AUR packages (instalados via paru)
+zen-browser-bin
+anydesk-bin
+gpu-screen-recorder-gtk
+visual-studio-code-bin
+linuxtoys
+bdf-unifont
+adwsteamgtk
+eden-bin
+gnome-extensions-cli
+grub-silent
+gradia-capture-git

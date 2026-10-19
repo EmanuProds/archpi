@@ -1,0 +1,20 @@
+base-devel git nano wget curl cava fastfetch paru
+pacman-contrib archlinux-appstream-data fish gdm-settings bazaar power-profiles-daemon resources topgrade gnome-epub-thumbnailer samba nautilus-share tesseract tesseract-data-por
+openssl gnome-tweaks fuse ddcutil grub-btrfs-support grub-hook gst-thumbnailers gufw
+file-roller zip unzip p7zip unrar
+ttf-dejavu ttf-liberation noto-fonts noto-fonts-emoji noto-fonts-cjk
+cups gutenprint gutenprint-cups cups-pdf bluez-cups bluez-utils foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds
+remmina gimp inkscape handbrake
+libreoffice-fresh libreoffice-fresh-pt-br
+zed
+python-pip kubectl mise github-cli starship android-tools tailscale opencode
+ttf-jetbrains-mono ttf-jetbrains-mono-nerd
+steam gamemode gamescope protonplus protontricks mangojuice heroic-games-launcher prismlauncher
+proton-cachyos proton-cachyos-slr wine-ge-custom winetricks wine-mono wine-gecko icoutils
+adw-gtk-theme plymouth
+adwaita-colors-icon-theme morewaita-icon-theme
+linux-cachyos linux-cachyos-headers
+lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader
+ffmpeg ffmpegthumbnailer
+libva libva-utils
+ttf-ms-fonts cabextract fontconfig
