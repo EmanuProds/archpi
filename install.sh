@@ -20,6 +20,7 @@ PHASES=(
   "12:Customization (plymouth, temas, ícones, fontes)"
   "13:LSPs (npm) + gopls"
   "14:Tuning (kernel, snapper, grub-btrfs)"
+  "15:GDM (login screen: escala de interface 125%)"
 )
 
 step "Iniciando archpi (Arch Linux, log: $LOG)"

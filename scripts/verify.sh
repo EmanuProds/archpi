@@ -19,4 +19,12 @@ done
 
 [ ! -e "$R/src" ] && ok "src/ removido" || bad "src/ ainda existe"
 
+# GDM: fase 15 deve existir e aplicar a escala de interface no login screen
+[ -f "$R/lib/phases/15.sh" ] && ok "fase 15 (GDM)" || bad "fase 15 (GDM) ausente"
+grep -q 'text-scaling-factor' "$R/lib/phases/15.sh" && ok "GDM aplica text-scaling-factor" || bad "GDM sem text-scaling-factor"
+grep -q '99-gdm-scale' "$R/lib/phases/15.sh" && ok "GDM keyfile 99- (vence o 95- da extensão)" || bad "GDM keyfile 99- ausente"
+grep -q 'monitors.xml' "$R/lib/phases/15.sh" && ok "GDM copia monitors.xml" || bad "GDM sem cópia de monitors.xml"
+grep -q 'system-db:gdm' "$R/lib/phases/15.sh" && ok "GDM cria profile dconf" || bad "GDM sem profile dconf"
+grep -q '"15:GDM' "$R/install.sh" && ok "install.sh registra fase 15" || bad "install.sh sem fase 15"
+
 exit "$fail"
